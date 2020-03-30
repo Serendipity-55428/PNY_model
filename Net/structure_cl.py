@@ -125,7 +125,7 @@ def fit():
             data_batch = data_batch.to(device=dev)
             x_batch, y_batch = data_batch[:, :-1], data_batch[:, -1].reshape(-1, 1)
             x_batch = x_batch.reshape(-1, 1, 10, 10)
-            output = torch.softmax(net(x_batch))
+            output = net(x_batch)
             loss = criterion(output, y_batch)
             l += loss
             if batch_i % 100 == 0:
