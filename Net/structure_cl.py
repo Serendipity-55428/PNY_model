@@ -67,6 +67,8 @@ class ClassiferNet(nn.Module):
             nn.Linear(in_features=200, out_features=25),
             nn.Softmax(dim=1)
         )
+        self._softmax = nn.Softmax(dim=1)
+
     def forward(self, input:torch.Tensor):
         """
         前向传播
@@ -83,7 +85,7 @@ class ClassiferNet(nn.Module):
         x.reshape(-1, reduce(lambda x,y: x*y, x.size[1:]))
         x = torch.cat(tensors=(x, input[:, :4]), dim=1)
         # print(x.size())
-        return self._fc(x) #改全连接层输入特征数量
+        return self._softmax(self._fc(x)) #改全连接层输入特征数量
 
 class MyDataset(Dataset):
     def __init__(self, data_path):
@@ -123,7 +125,7 @@ def fit():
             data_batch = data_batch.to(device=dev)
             x_batch, y_batch = data_batch[:, :-1], data_batch[:, -1].reshape(-1, 1)
             x_batch = x_batch.reshape(-1, 1, 10, 10)
-            output = torch.log2(net(x_batch))
+            output = torch.softmax(net(x_batch))
             loss = criterion(output, y_batch)
             l += loss
             if batch_i % 100 == 0:

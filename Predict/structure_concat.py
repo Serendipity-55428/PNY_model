@@ -32,7 +32,7 @@ class ConcatNet:
         result_cl = net_cl(x) #改成区间映射
         result_re = net_re(x)
         result= result_cl + result_re
-        acc = torch.where(torch.abs(result-y)<self._acc_TH,
+        acc = torch.where(torch.abs(result-y) < self._acc_TH,
                           torch.tensor(1.), torch.tensor(2.)).sum(dtype=torch.float32) / self._test_dataset.size()[0]
         print("模型总准确率为: %s" % acc)
 
